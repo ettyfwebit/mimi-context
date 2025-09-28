@@ -1,9 +1,9 @@
 ---
 name: Feature Request
 about: Suggest an idea for this project
-title: '[FEATURE] '
-labels: ['enhancement', 'needs-triage']
-assignees: ''
+title: "[FEATURE] "
+labels: ["enhancement", "needs-triage"]
+assignees: ""
 ---
 
 ## Feature Summary
@@ -27,12 +27,14 @@ Describe any alternative solutions or features you've considered.
 If you have technical suggestions for implementation, please share them:
 
 **Backend Changes:**
+
 - [ ] New API endpoints needed
 - [ ] Database schema changes
 - [ ] New dependencies required
 - [ ] Configuration changes needed
 
 **Frontend Changes:**
+
 - [ ] New UI components needed
 - [ ] New pages/routes required
 - [ ] State management changes
@@ -59,10 +61,12 @@ If applicable, add sketches, mockups, or wireframes to help explain your idea.
 ## Impact Assessment
 
 **Positive Impact:**
+
 - What benefits will this feature provide?
 - Who will be helped by this feature?
 
 **Potential Concerns:**
+
 - Are there any potential downsides?
 - What might be challenging about implementation?
 - Could this affect performance or security?
@@ -83,6 +87,7 @@ Add any other context, screenshots, or examples about the feature request here.
 ## Related Issues/PRs
 
 Link any related issues or pull requests:
+
 - Related to #
 - Depends on #
 - Blocks #

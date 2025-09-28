@@ -6,34 +6,34 @@ name: Security Scan
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   schedule:
     # Run security scans daily at 2 AM UTC
-    - cron: '0 2 * * *'
+    - cron: "0 2 * * *"
 
 jobs:
   # Dependency Vulnerability Scanning
   dependency-scan:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Run Trivy vulnerability scanner in repo mode
-      uses: aquasecurity/trivy-action@master
-      with:
-        scan-type: 'fs'
-        scan-ref: '.'
-        format: 'sarif'
-        output: 'trivy-results.sarif'
-    
-    - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v2
-      if: always()
-      with:
-        sarif_file: 'trivy-results.sarif'
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-results.sarif"
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: "trivy-results.sarif"
 
   # Python Dependencies Security Scan
   python-security:
@@ -41,41 +41,41 @@ jobs:
     defaults:
       run:
         working-directory: ./mimi-core
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v6
-      with:
-        python-version: '3.10'
-    
-    - name: Install pip-audit
-      run: |
-        python -m pip install --upgrade pip
-        pip install pip-audit
-    
-    - name: Run pip-audit
-      run: |
-        pip-audit --format=json --output=pip-audit-report.json --require requirements.txt || true
-        pip-audit --require requirements.txt
-    
-    - name: Install safety
-      run: pip install safety
-    
-    - name: Run safety check
-      run: |
-        safety check --json --output safety-report.json || true
-        safety check
-    
-    - name: Upload Python security reports
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: python-security-reports
-        path: |
-          ./mimi-core/pip-audit-report.json
-          ./mimi-core/safety-report.json
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+
+      - name: Install pip-audit
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit
+
+      - name: Run pip-audit
+        run: |
+          pip-audit --format=json --output=pip-audit-report.json --require requirements.txt || true
+          pip-audit --require requirements.txt
+
+      - name: Install safety
+        run: pip install safety
+
+      - name: Run safety check
+        run: |
+          safety check --json --output safety-report.json || true
+          safety check
+
+      - name: Upload Python security reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: python-security-reports
+          path: |
+            ./mimi-core/pip-audit-report.json
+            ./mimi-core/safety-report.json
 
   # Node.js Dependencies Security Scan
   nodejs-security:
@@ -83,71 +83,71 @@ jobs:
     defaults:
       run:
         working-directory: ./mimi-web
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Use Node.js 20
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
-        cache: 'npm'
-        cache-dependency-path: './mimi-web/package-lock.json'
-    
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Run npm audit
-      run: |
-        npm audit --audit-level=moderate --json > npm-audit-report.json || true
-        npm audit --audit-level=moderate
-    
-    - name: Upload Node.js security report
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: nodejs-security-report
-        path: ./mimi-web/npm-audit-report.json
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+          cache-dependency-path: "./mimi-web/package-lock.json"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: |
+          npm audit --audit-level=moderate --json > npm-audit-report.json || true
+          npm audit --audit-level=moderate
+
+      - name: Upload Node.js security report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: nodejs-security-report
+          path: ./mimi-web/npm-audit-report.json
 
   # Secrets Scanning with GitLeaks
   secrets-scan:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # Fetch full history for comprehensive scanning
-    
-    - name: Run GitLeaks scan
-      uses: gitleaks/gitleaks-action@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history for comprehensive scanning
+
+      - name: Run GitLeaks scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
   # Container Security Scanning (for Docker images)
   container-security:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Build Docker image
-      working-directory: ./mimi-core
-      run: |
-        docker build -t mimi-core:latest .
-    
-    - name: Run Trivy vulnerability scanner on container
-      uses: aquasecurity/trivy-action@master
-      with:
-        image-ref: 'mimi-core:latest'
-        format: 'sarif'
-        output: 'trivy-container-results.sarif'
-    
-    - name: Upload Trivy container scan results
-      uses: github/codeql-action/upload-sarif@v2
-      if: always()
-      with:
-        sarif_file: 'trivy-container-results.sarif'
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        working-directory: ./mimi-core
+        run: |
+          docker build -t mimi-core:latest .
+
+      - name: Run Trivy vulnerability scanner on container
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "mimi-core:latest"
+          format: "sarif"
+          output: "trivy-container-results.sarif"
+
+      - name: Upload Trivy container scan results
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: "trivy-container-results.sarif"
 
   # CodeQL Analysis for Advanced Security Scanning
   codeql:
@@ -161,37 +161,37 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'python', 'javascript' ]
+        language: ["python", "javascript"]
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
-        queries: security-extended,security-and-quality
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended,security-and-quality
 
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v2
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
-      with:
-        category: "/language:${{matrix.language}}"
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{matrix.language}}"
 
   # OWASP ZAP Baseline Security Scan
   zap-scan:
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'  # Only run on scheduled scans
-    
+    if: github.event_name == 'schedule' # Only run on scheduled scans
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: ZAP Baseline Scan
-      uses: zaproxy/action-baseline@v0.7.0
-      with:
-        target: 'https://your-deployed-app-url.com'  # Replace with your actual URL
-        rules_file_name: '.zap/rules.tsv'
-        cmd_options: '-a'
+      - uses: actions/checkout@v4
+
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.7.0
+        with:
+          target: "https://your-deployed-app-url.com" # Replace with your actual URL
+          rules_file_name: ".zap/rules.tsv"
+          cmd_options: "-a"

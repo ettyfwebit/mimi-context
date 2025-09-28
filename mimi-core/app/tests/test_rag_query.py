@@ -46,13 +46,13 @@ class TestRagQuery:
                 )
             ]
             
-            # Mock the dependency function properly
-            async def mock_get_vector_adapter():
+            # Mock the dependency
+            def mock_get_vector_adapter():
                 return mock_adapter
             
-            # Replace the dependency in the module
-            import app.api.rag.router
-            mp.setattr(app.api.rag.router, "get_vector_adapter", mock_get_vector_adapter)
+            # Replace the dependency
+            from app.api.rag.router import get_vector_adapter
+            mp.setattr("app.api.rag.router.get_vector_adapter", lambda: mock_adapter)
             
             # Make request
             response = self.client.post("/rag/query", json=query_data)
@@ -148,12 +148,7 @@ class TestRagQuery:
                 )
             ]
             
-            # Mock the dependency function properly
-            async def mock_get_vector_adapter():
-                return mock_adapter
-            
-            import app.api.rag.router
-            mp.setattr(app.api.rag.router, "get_vector_adapter", mock_get_vector_adapter)
+            mp.setattr("app.api.rag.router.get_vector_adapter", lambda: mock_adapter)
             
             # Test the exact example from OpenAPI spec
             query_data = {

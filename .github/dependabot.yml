@@ -11,7 +11,7 @@ updates:
       day: "monday"
       time: "09:00"
     reviewers:
-      - "ettyfwebit"  # Replace with actual usernames
+      - "ettyfwebit" # Replace with actual usernames
     assignees:
       - "ettyfwebit"
     commit-message:

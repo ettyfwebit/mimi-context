@@ -1,10 +1,13 @@
-import React, { useState, useRef } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { SearchForm, SearchFormHandle } from '@/components/features/search/SearchForm';
-import { SearchResults } from '@/components/features/search/SearchResults';
-import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { apiService } from '@/services/api';
-import type { RAGQueryRequest, Chunk } from '@/types/api';
+import React, { useState, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  SearchForm,
+  SearchFormHandle,
+} from "@/components/features/search/SearchForm";
+import { SearchResults } from "@/components/features/search/SearchResults";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { apiService } from "@/services/api";
+import type { RAGQueryRequest, Chunk } from "@/types/api";
 
 interface SearchState {
   query: RAGQueryRequest | null;
@@ -16,11 +19,11 @@ export const SearchPage: React.FC = () => {
     query: null,
     hasSearched: false,
   });
-  
+
   const searchFormRef = useRef<SearchFormHandle>(null);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['search', searchState.query],
+    queryKey: ["search", searchState.query],
     queryFn: () => apiService.queryRAG(searchState.query!),
     enabled: !!searchState.query,
     keepPreviousData: true,
@@ -32,7 +35,7 @@ export const SearchPage: React.FC = () => {
       top_k: formData.top_k,
       filters: formData.source ? { source: [formData.source] } : undefined,
     };
-    
+
     setSearchState({
       query,
       hasSearched: true,
@@ -51,7 +54,7 @@ export const SearchPage: React.FC = () => {
   });
 
   const chunks: Chunk[] = data?.chunks || [];
-  const currentQuery = searchState.query?.question || '';
+  const currentQuery = searchState.query?.question || "";
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -94,7 +97,12 @@ export const SearchPage: React.FC = () => {
         <div className="text-center py-12">
           <div className="w-16 h-16 mx-auto mb-4 text-gray-400">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
           </div>
           <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">

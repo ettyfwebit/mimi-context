@@ -1,26 +1,27 @@
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Search, Copy, ExternalLink, Filter } from 'lucide-react';
-import { Card } from '@/components/ui/Card';
-import { Input } from '@/components/ui/Input';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
-import { Skeleton } from '@/components/ui/Skeleton';
-import { formatDate, copyToClipboard, isUrl } from '@/utils/text';
-import { apiService } from '@/services/api';
-import toast from 'react-hot-toast';
-import type { Document } from '@/types/api';
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Search, Copy, ExternalLink, Filter } from "lucide-react";
+import { Card } from "@/components/ui/Card";
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { formatDate, copyToClipboard, isUrl } from "@/utils/text";
+import { apiService } from "@/services/api";
+import toast from "react-hot-toast";
+import type { Document } from "@/types/api";
 
 export const DocsTab: React.FC = () => {
-  const [sourceFilter, setSourceFilter] = useState('');
+  const [sourceFilter, setSourceFilter] = useState("");
   const [selectedDoc, setSelectedDoc] = useState<Document | null>(null);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['admin-docs', sourceFilter],
-    queryFn: () => apiService.getDocuments({ 
-      source: sourceFilter || undefined,
-      limit: 50 
-    }),
+    queryKey: ["admin-docs", sourceFilter],
+    queryFn: () =>
+      apiService.getDocuments({
+        source: sourceFilter || undefined,
+        limit: 50,
+      }),
   });
 
   const documents = data?.documents || [];
@@ -28,9 +29,9 @@ export const DocsTab: React.FC = () => {
   const handleCopyDocId = async (docId: string) => {
     const success = await copyToClipboard(docId);
     if (success) {
-      toast.success('Document ID copied to clipboard');
+      toast.success("Document ID copied to clipboard");
     } else {
-      toast.error('Failed to copy to clipboard');
+      toast.error("Failed to copy to clipboard");
     }
   };
 
@@ -38,7 +39,8 @@ export const DocsTab: React.FC = () => {
     return (
       <Card className="text-center py-12">
         <p className="text-red-600 dark:text-red-400">
-          Failed to load documents: {error instanceof Error ? error.message : 'Unknown error'}
+          Failed to load documents:{" "}
+          {error instanceof Error ? error.message : "Unknown error"}
         </p>
       </Card>
     );
@@ -59,7 +61,7 @@ export const DocsTab: React.FC = () => {
           </div>
           <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
             <Filter className="w-4 h-4 mr-1" />
-            {documents.length} document{documents.length !== 1 ? 's' : ''}
+            {documents.length} document{documents.length !== 1 ? "s" : ""}
           </div>
         </div>
       </Card>
@@ -205,7 +207,7 @@ export const DocsTab: React.FC = () => {
               ✕
             </Button>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -224,7 +226,7 @@ export const DocsTab: React.FC = () => {
                 </Button>
               </div>
             </div>
-            
+
             <div>
               <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Path
@@ -233,14 +235,14 @@ export const DocsTab: React.FC = () => {
                 {selectedDoc.path}
               </p>
             </div>
-            
+
             <div>
               <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Source
               </h4>
               <Badge variant="secondary">{selectedDoc.source}</Badge>
             </div>
-            
+
             <div>
               <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Last Updated
@@ -249,7 +251,7 @@ export const DocsTab: React.FC = () => {
                 {formatDate(selectedDoc.updated_at)}
               </p>
             </div>
-            
+
             {selectedDoc.lang && (
               <div>
                 <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -258,7 +260,7 @@ export const DocsTab: React.FC = () => {
                 <Badge variant="secondary">{selectedDoc.lang}</Badge>
               </div>
             )}
-            
+
             {selectedDoc.hash && (
               <div>
                 <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

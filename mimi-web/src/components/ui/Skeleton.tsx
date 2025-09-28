@@ -1,5 +1,5 @@
-import React from 'react';
-import { clsx } from 'clsx';
+import React from "react";
+import { clsx } from "clsx";
 
 interface SkeletonProps {
   className?: string;
@@ -21,13 +21,13 @@ export const Skeleton: React.FC<SkeletonProps> = ({
           <div
             key={i}
             className={clsx([
-              'animate-pulse bg-gray-200 dark:bg-gray-700 rounded',
-              i === lines - 1 ? 'w-3/4' : 'w-full',
+              "animate-pulse bg-gray-200 dark:bg-gray-700 rounded",
+              i === lines - 1 ? "w-3/4" : "w-full",
               className,
             ])}
             style={{
-              width: i === lines - 1 ? '75%' : width,
-              height: height || '1rem',
+              width: i === lines - 1 ? "75%" : width,
+              height: height || "1rem",
             }}
           />
         ))}
@@ -38,10 +38,10 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   return (
     <div
       className={clsx([
-        'animate-pulse bg-gray-200 dark:bg-gray-700 rounded',
+        "animate-pulse bg-gray-200 dark:bg-gray-700 rounded",
         className,
       ])}
-      style={{ width, height: height || '1rem' }}
+      style={{ width, height: height || "1rem" }}
     />
   );
 };

@@ -1,9 +1,9 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { Search, MessageSquare, Settings, Moon, Sun } from 'lucide-react';
-import { useDarkMode } from '@/hooks/useDarkMode';
-import { Button } from '@/components/ui/Button';
-import { clsx } from 'clsx';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { Search, MessageSquare, Settings, Moon, Sun } from "lucide-react";
+import { useDarkMode } from "@/hooks/useDarkMode";
+import { Button } from "@/components/ui/Button";
+import { clsx } from "clsx";
 
 interface NavigationProps {
   agentEnabled: boolean;
@@ -13,9 +13,11 @@ export const Navigation: React.FC<NavigationProps> = ({ agentEnabled }) => {
   const { isDark, toggleDarkMode } = useDarkMode();
 
   const navItems = [
-    { to: '/search', icon: Search, label: 'Search' },
-    ...(agentEnabled ? [{ to: '/chat', icon: MessageSquare, label: 'Chat' }] : []),
-    { to: '/studio', icon: Settings, label: 'Studio' },
+    { to: "/search", icon: Search, label: "Search" },
+    ...(agentEnabled
+      ? [{ to: "/chat", icon: MessageSquare, label: "Chat" }]
+      : []),
+    { to: "/studio", icon: Settings, label: "Studio" },
   ];
 
   return (
@@ -28,7 +30,7 @@ export const Navigation: React.FC<NavigationProps> = ({ agentEnabled }) => {
                 Mimi Web
               </h1>
             </div>
-            
+
             <div className="hidden md:flex space-x-4">
               {navItems.map(({ to, icon: Icon, label }) => (
                 <NavLink
@@ -36,10 +38,10 @@ export const Navigation: React.FC<NavigationProps> = ({ agentEnabled }) => {
                   to={to}
                   className={({ isActive }) =>
                     clsx([
-                      'inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                      "inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
                       isActive
-                        ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
-                        : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700',
+                        ? "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
+                        : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700",
                     ])
                   }
                 >
@@ -76,10 +78,10 @@ export const Navigation: React.FC<NavigationProps> = ({ agentEnabled }) => {
               to={to}
               className={({ isActive }) =>
                 clsx([
-                  'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                  "flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
                   isActive
-                    ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
-                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700',
+                    ? "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
+                    : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700",
                 ])
               }
             >
