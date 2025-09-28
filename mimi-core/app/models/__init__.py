@@ -6,6 +6,11 @@ from .chunk import ChunkItem, VectorUpsertBatch
 from .rag import RagQuery, RagResultItem
 from .metadata import EventRecord, DocumentRecord
 from .agent import AgentQuery, AgentResponse, CitationItem, ConversationTurn, ConversationMemory
+from .confluence import (
+    ConfluenceFullSyncRequest, ConfluenceFullSyncResponse, ConfluenceProgress,
+    ConfluenceJobStatus, ConfluenceCancelRequest, ConfluenceReportRequest,
+    ConfluencePage, ConfluenceChunkMetadata, ConfluenceSnapshot, JobStatus
+)
 
 __all__ = [
     "IngestInput",
@@ -19,5 +24,15 @@ __all__ = [
     "AgentResponse",
     "CitationItem",
     "ConversationTurn",
-    "ConversationMemory"
+    "ConversationMemory",
+    "ConfluenceFullSyncRequest",
+    "ConfluenceFullSyncResponse", 
+    "ConfluenceProgress",
+    "ConfluenceJobStatus",
+    "ConfluenceCancelRequest",
+    "ConfluenceReportRequest",
+    "ConfluencePage",
+    "ConfluenceChunkMetadata",
+    "ConfluenceSnapshot",
+    "JobStatus"
 ]

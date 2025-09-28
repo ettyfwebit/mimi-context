@@ -10,6 +10,11 @@ import type {
   AdminDocsResponse,
   AdminUpdatesResponse,
   HealthResponse,
+  ConfluenceFullSyncRequest,
+  ConfluenceFullSyncResponse,
+  ConfluenceJobStatus,
+  ConfluenceCancelRequest,
+  ConfluenceReportResponse,
 } from "@/types/api";
 
 // Create axios instance with base configuration
@@ -141,6 +146,46 @@ export const apiService = {
   // Health check
   async getHealth(): Promise<HealthResponse> {
     const response = await api.get<HealthResponse>("/health");
+    return response.data;
+  },
+
+  // Confluence Full Sync
+  async startConfluenceSync(
+    request: ConfluenceFullSyncRequest,
+  ): Promise<ConfluenceFullSyncResponse> {
+    const response = await api.post<ConfluenceFullSyncResponse>(
+      "/admin/confluence/fullsync",
+      request,
+    );
+    return response.data;
+  },
+
+  async getConfluenceSyncStatus(
+    jobId: string,
+  ): Promise<ConfluenceJobStatus> {
+    const response = await api.get<ConfluenceJobStatus>(
+      `/admin/confluence/sync-status?job_id=${encodeURIComponent(jobId)}`,
+    );
+    return response.data;
+  },
+
+  async cancelConfluenceSync(
+    request: ConfluenceCancelRequest,
+  ): Promise<{ ok: boolean; message: string }> {
+    const response = await api.post<{ ok: boolean; message: string }>(
+      "/admin/confluence/cancel",
+      request,
+    );
+    return response.data;
+  },
+
+  async getConfluenceReport(
+    jobId: string,
+    type: "failed" | "indexed" | "skipped",
+  ): Promise<ConfluenceReportResponse> {
+    const response = await api.get<ConfluenceReportResponse>(
+      `/admin/confluence/sync-report?job_id=${encodeURIComponent(jobId)}&type=${type}`,
+    );
     return response.data;
   },
 };

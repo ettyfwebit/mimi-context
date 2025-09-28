@@ -4,7 +4,7 @@ Main FastAPI application for Mimi Core.
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import health_router, ingest_router, rag_router, admin_router, agent_router
+from app.api import health_router, ingest_router, rag_router, admin_router, agent_router, confluence_router
 from app.infra.config import get_settings
 from app.infra.logging import setup_logger, get_logger
 
@@ -60,6 +60,7 @@ def create_app() -> FastAPI:
     app.include_router(rag_router)
     app.include_router(admin_router)
     app.include_router(agent_router)
+    app.include_router(confluence_router)
     
     return app
 

@@ -145,7 +145,181 @@ See `.env.example` for full configuration options.
 - `GET /admin/updates` - List recent ingestion events
 - `GET /admin/docs` - List processed documents
 
+### Confluence Full Sync
+
+- `POST /admin/confluence/fullsync` - Start Confluence sync job
+- `GET /admin/confluence/sync-status` - Poll job status
+- `POST /admin/confluence/cancel` - Cancel running job
+- `GET /admin/confluence/sync-report` - Get job reports
+
 Full API documentation available at `/docs` when running.
+
+## Confluence Full Sync
+
+Mimi Core supports automated ingestion from Atlassian Confluence spaces or page hierarchies. This feature discovers pages based on your scope and filters, fetches and normalizes content, chunks it intelligently, generates embeddings, and stores everything in your vector database.
+
+### Configuration
+
+Add these environment variables to your `.env` file:
+
+```bash
+# Confluence Configuration (Required)
+CONFLUENCE_BASE_URL=https://yourcompany.atlassian.net
+CONFLUENCE_AUTH_TOKEN=your_api_token_here
+
+# Sync Scope (Choose one)
+CONF_SPACE_KEY=ENG                    # Sync entire space
+CONF_ROOT_PAGE_ID=123456              # Or sync from specific page
+
+# Content Filters (Optional)
+CONF_INCLUDE_LABELS=kb,public         # Only pages with these labels
+CONF_EXCLUDE_LABELS=draft,deprecated  # Skip pages with these labels
+CONF_PATH_PREFIX=                     # Optional path filter
+
+# Limits and Performance
+CONF_MAX_PAGES=2000                   # Maximum pages to process
+CONF_MAX_DEPTH=5                      # Maximum hierarchy depth
+CONF_CONCURRENCY=4                    # Parallel fetch workers
+CONF_DRY_RUN_DEFAULT=false            # Default dry-run mode
+
+# Content Processing
+CHUNK_TARGET_SIZE=1000                # Target chunk size in characters
+CHUNK_OVERLAP=140                     # Overlap between chunks
+```
+
+### Authentication Setup
+
+1. **Generate API Token**: Go to [Atlassian Account Settings](https://id.atlassian.com/manage/api-tokens)
+2. **Create Token**: Click "Create API token" with appropriate scope
+3. **Set Token**: Use the token as `CONFLUENCE_AUTH_TOKEN`
+
+For Confluence Server, use Basic Auth: `username:password` base64 encoded.
+
+### Usage Examples
+
+**Start a full sync:**
+
+```bash
+curl -X POST "http://localhost:8080/admin/confluence/fullsync" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "space_key": "ENG",
+    "include_labels": ["kb", "public"],
+    "exclude_labels": ["draft", "deprecated"],
+    "max_pages": 500,
+    "dry_run": false
+  }'
+
+# Response: {"job_id": "conf-sync-2025-09-28T12-03-11-a1b2c3d4", "status": "queued"}
+```
+
+**Poll job status:**
+
+```bash
+curl "http://localhost:8080/admin/confluence/sync-status?job_id=conf-sync-2025-09-28T12-03-11-a1b2c3d4"
+
+# Response:
+# {
+#   "job_id": "conf-sync-2025-09-28T12-03-11-a1b2c3d4",
+#   "status": "running",
+#   "progress": {
+#     "discovered_pages": 412,
+#     "fetched_pages": 398, 
+#     "indexed_chunks": 5820,
+#     "skipped_unchanged": 250,
+#     "failed_pages": 3
+#   },
+#   "current": {"page_id": "12345", "title": "API Documentation"},
+#   "logs_tail": ["fetched page 12345", "chunked 6 parts", "upserted 6 chunks"]
+# }
+```
+
+**Get reports:**
+
+```bash
+# Get failed pages
+curl "http://localhost:8080/admin/confluence/sync-status?job_id=JOB_ID&type=failed"
+
+# Get indexed pages  
+curl "http://localhost:8080/admin/confluence/sync-status?job_id=JOB_ID&type=indexed"
+
+# Get skipped pages
+curl "http://localhost:8080/admin/confluence/sync-status?job_id=JOB_ID&type=skipped"
+```
+
+**Cancel a job:**
+
+```bash
+curl -X POST "http://localhost:8080/admin/confluence/cancel" \
+  -H "Content-Type: application/json" \
+  -d '{"job_id": "conf-sync-2025-09-28T12-03-11-a1b2c3d4"}'
+```
+
+### Sync Behavior
+
+#### Discovery Phase
+- **Space Mode**: Discovers all pages in the specified space
+- **Hierarchy Mode**: Traverses from root page to specified depth
+- **Filtering**: Applies include/exclude labels and path prefix filters
+
+#### Processing Phase
+1. **Fetch**: Downloads page content and metadata in parallel (respects rate limits)
+2. **Normalize**: Converts Confluence storage format to clean text with preserved headings
+3. **Chunk**: Creates header-aware chunks with configurable size and overlap
+4. **Deduplicate**: Skips unchanged pages using content hash comparison
+5. **Embed**: Generates embeddings using configured provider (local or OpenAI)
+6. **Upsert**: Stores chunks in vector database with rich metadata
+
+#### Metadata Stored Per Chunk
+- `doc_id`: `conf:{pageId}@{version}`
+- `source`: "confluence"  
+- `path`: Page URL or `{spaceKey}/{pageTitle}`
+- `space_key`, `page_id`, `page_title`, `version`
+- `updated_by`, `updated_at`
+- `labels[]`, `ancestors[]` (page hierarchy)
+- `lang` (detected language)
+- `section_title` (nearest heading)
+- `hash` (for deduplication)
+
+### Incremental Sync
+
+Subsequent syncs automatically detect changes:
+- **Changed pages**: Re-processed and re-indexed
+- **Unchanged pages**: Skipped (counted in `skipped_unchanged`)  
+- **New pages**: Added to index
+- **Deleted pages**: Not automatically removed (manual cleanup needed)
+
+### Dry Run Mode
+
+Use `"dry_run": true` to:
+- Discover and analyze pages without indexing
+- Test filters and scope configuration
+- Preview what would be processed
+- Check for access issues
+
+### Rate Limiting & Error Handling
+
+- **429 Rate Limits**: Automatic exponential backoff with jitter
+- **5xx Server Errors**: Retry up to 3 times per page
+- **Network Issues**: Continue processing other pages
+- **Failed Pages**: Listed in failure report with error details
+
+### Content Normalization
+
+Confluence storage format is converted to clean text:
+- **Preserved**: Headings (as Markdown), paragraphs, lists, meaningful tables
+- **Converted**: Links (with URLs), code blocks, info boxes  
+- **Removed**: TOC macros, navigation, excessive whitespace
+- **Images**: Replaced with `(Image: alt text)` placeholders
+
+### Frontend Integration
+
+The web UI provides a "Confluence Sync" tab in the Studio page with:
+- **Configuration Form**: Set scope, labels, limits, dry-run mode
+- **Progress Monitor**: Live status updates and activity logs
+- **Reports View**: Browse failed/indexed/skipped pages
+- **Cancel Button**: Stop running jobs
+- **Search Integration**: Quick link to search synced content
 
 ## Testing
 
