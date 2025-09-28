@@ -1,0 +1,173 @@
+openapi: 3.0.3
+info:
+  title: Mimi Core – My Information, My Intelligence
+  version: 0.1.0
+  description: >
+    Single-service MNVP: upload documents → normalize → chunk → embed → index → RAG query with citations.
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: health
+  - name: ingest
+  - name: rag
+  - name: admin
+
+paths:
+  /health:
+    get:
+      tags: [health]
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  /ingest/upload:
+    post:
+      tags: [ingest]
+      summary: Upload a document for ingestion (manual)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Plain text / Markdown (PDF optional as text-only)
+                path:
+                  type: string
+                  nullable: true
+                lang:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Ingestion accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean, example: true }
+                  doc_id: { type: string, example: "upload:booking_flow.md" }
+                  chunks: { type: integer, example: 7 }
+
+  /rag/query:
+    post:
+      tags: [rag]
+      summary: Retrieve top-k chunks with citations (no LLM compose in MNVP)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [question]
+              properties:
+                question:
+                  type: string
+                  example: "How to book a ticket?"
+                top_k:
+                  type: integer
+                  default: 5
+                filters:
+                  type: object
+                  additionalProperties: true
+                  example: { "source": ["upload"] }
+      responses:
+        '200':
+          description: Ranked snippets with citations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        text:
+                          type: string
+                          description: Empty for MNVP (consumer composes)
+                          example: ""
+                        chunks:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              chunk_id: { type: string, example: "upload:foo.md::c0" }
+                              doc_id:   { type: string, example: "upload:foo.md" }
+                              source:   { type: string, example: "upload" }
+                              path:     { type: string, example: "kb/foo.md" }
+                              score:    { type: number, format: float, example: 0.86 }
+                              snippet:  { type: string, example: "To book a ticket..." }
+
+  /admin/updates:
+    get:
+      tags: [admin]
+      summary: List recent ingestion events
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, default: 50 }
+      responses:
+        '200':
+          description: Recent events
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:         { type: integer, example: 12 }
+                        type:       { type: string, example: "ingest" }
+                        ref:        { type: string, nullable: true, example: "upload:foo.md" }
+                        status:     { type: string, example: "success" }
+                        created_at: { type: string, example: "2025-09-25T10:03:00Z" }
+
+  /admin/docs:
+    get:
+      tags: [admin]
+      summary: List recent documents
+      parameters:
+        - in: query
+          name: source
+          schema: { type: string, nullable: true, example: "upload" }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 100 }
+      responses:
+        '200':
+          description: Recent documents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  documents:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        doc_id:     { type: string, example: "upload:foo.md" }
+                        source:     { type: string, example: "upload" }
+                        path:       { type: string, nullable: true, example: "kb/foo.md" }
+                        hash:       { type: string, example: "a1b2c3..." }
+                        lang:       { type: string, nullable: true, example: "en" }
+                        updated_at: { type: string, example: "2025-09-25T10:00:00Z" }

@@ -1,0 +1,3 @@
+"""
+Mimi Core application package.
+"""
