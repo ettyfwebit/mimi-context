@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
-import { StudioTabs } from '@/components/features/studio/StudioTabs';
-import { UploadTab } from '@/components/features/studio/UploadTab';
-import { DocsTab } from '@/components/features/studio/DocsTab';
-import { EventsTab } from '@/components/features/studio/EventsTab';
-import { HealthTab } from '@/components/features/studio/HealthTab';
+import React, { useState } from "react";
+import { StudioTabs } from "@/components/features/studio/StudioTabs";
+import { UploadTab } from "@/components/features/studio/UploadTab";
+import { DocsTab } from "@/components/features/studio/DocsTab";
+import { EventsTab } from "@/components/features/studio/EventsTab";
+import { HealthTab } from "@/components/features/studio/HealthTab";
 
-type TabId = 'upload' | 'docs' | 'events' | 'health';
+type TabId = "upload" | "docs" | "events" | "health";
 
 const tabs = [
-  { id: 'upload' as TabId, label: 'Upload' },
-  { id: 'docs' as TabId, label: 'Documents' },
-  { id: 'events' as TabId, label: 'Events' },
-  { id: 'health' as TabId, label: 'Health' },
+  { id: "upload" as TabId, label: "Upload" },
+  { id: "docs" as TabId, label: "Documents" },
+  { id: "events" as TabId, label: "Events" },
+  { id: "health" as TabId, label: "Health" },
 ];
 
 export const StudioPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<TabId>('upload');
+  const [activeTab, setActiveTab] = useState<TabId>("upload");
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'upload':
+      case "upload":
         return <UploadTab />;
-      case 'docs':
+      case "docs":
         return <DocsTab />;
-      case 'events':
+      case "events":
         return <EventsTab />;
-      case 'health':
+      case "health":
         return <HealthTab />;
       default:
         return null;
@@ -51,10 +51,8 @@ export const StudioPage: React.FC = () => {
             onTabChange={(tabId) => setActiveTab(tabId as TabId)}
           />
         </div>
-        
-        <div className="p-6">
-          {renderTabContent()}
-        </div>
+
+        <div className="p-6">{renderTabContent()}</div>
       </div>
     </div>
   );

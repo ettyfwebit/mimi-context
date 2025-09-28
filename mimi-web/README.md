@@ -1,10 +1,13 @@
 # Mimi Web
 
-A modern React frontend for the Mimi knowledge base system. Provides intelligent search, AI chat, and administrative tools for managing your documents and system health.
+A modern React frontend for the Mimi knowledge base system. Provides intelligent
+search, AI chat, and administrative tools for managing your documents and system
+health.
 
 ## Features
 
 ### 🔍 Search
+
 - **Intelligent search** with ranked results and confidence scores
 - **Smart snippets** with keyword highlighting
 - **Source citations** with clickable links
@@ -12,18 +15,21 @@ A modern React frontend for the Mimi knowledge base system. Provides intelligent
 - **Low confidence warnings** with helpful suggestions
 
 ### 💬 Chat (Optional)
+
 - **AI-powered conversations** with source citations
 - **Inline source references** with clickable markers
 - **Model selection** for different AI capabilities
 - **Raw chunks debug view** for development
 
 ### 🛠️ Studio
+
 - **File upload** with drag-and-drop support
 - **Document management** with filtering and search
 - **Event monitoring** with status tracking
 - **Health monitoring** and configuration display
 
 ### 🎨 User Experience
+
 - **Dark mode** support with system preference detection
 - **Responsive design** for mobile and desktop
 - **Keyboard shortcuts** (/ to focus search, ⌘+Enter to submit)
@@ -35,17 +41,17 @@ A modern React frontend for the Mimi knowledge base system. Provides intelligent
 ### 1. Installation
 
 ```bash
-npm install
+
 ```
 
 ### 2. Environment Configuration
 
 Copy the environment template:
+
 ```bash
-cp .env.example .env.local
-```
 
 Edit `.env.local` and set your backend URL:
+
 ```env
 VITE_MIMI_API_BASE=http://localhost:8080
 ```
@@ -67,26 +73,28 @@ npm run preview
 
 ## Environment Variables
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `VITE_MIMI_API_BASE` | ✅ | - | Backend API base URL |
-| `VITE_MIMI_API_KEY` | ❌ | - | API key for authentication |
-| `VITE_MIMI_DEFAULT_TOP_K` | ❌ | `5` | Default number of search results |
-| `VITE_MIMI_DEFAULT_MODEL` | ❌ | - | Default AI model for chat |
-| `VITE_MIMI_CONFIDENCE_THRESHOLD` | ❌ | `0.30` | Threshold for low confidence warnings |
+| Variable                         | Required | Default | Description                           |
+| -------------------------------- | -------- | ------- | ------------------------------------- |
+| `VITE_MIMI_API_BASE`             | ✅       | -       | Backend API base URL                  |
+| `VITE_MIMI_API_KEY`              | ❌       | -       | API key for authentication            |
+| `VITE_MIMI_DEFAULT_TOP_K`        | ❌       | `5`     | Default number of search results      |
+| `VITE_MIMI_DEFAULT_MODEL`        | ❌       | -       | Default AI model for chat             |
+| `VITE_MIMI_CONFIDENCE_THRESHOLD` | ❌       | `0.30`  | Threshold for low confidence warnings |
 
 ## Backend API Requirements
 
 This frontend expects the following endpoints from your Mimi Core backend:
 
 ### Required Endpoints
+
 - `POST /rag/query` - Retrieve search results
 - `POST /ingest/upload` - Upload documents
 - `GET /admin/docs` - List documents
-- `GET /admin/updates` - List ingestion events  
+- `GET /admin/updates` - List ingestion events
 - `GET /health` - Health check
 
 ### Optional Endpoints
+
 - `POST /agent/ask` - AI chat (enables Chat page)
 
 ## Technology Stack
@@ -104,7 +112,7 @@ This frontend expects the following endpoints from your Mimi Core backend:
 
 ## Project Structure
 
-```
+```text
 src/
 ├── components/          # Reusable UI components
 │   ├── ui/             # Basic UI primitives (Button, Input, etc.)
@@ -129,11 +137,13 @@ src/
 ## Testing
 
 Run tests:
+
 ```bash
 npm test
 ```
 
 Run tests with UI:
+
 ```bash
 npm run test:ui
 ```
@@ -141,11 +151,13 @@ npm run test:ui
 ## Code Quality
 
 Format code:
+
 ```bash
 npm run format
 ```
 
 Lint code:
+
 ```bash
 npm run lint
 npm run lint:fix

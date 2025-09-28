@@ -1,8 +1,8 @@
 {
   "folders": [
     {
-      "path": "."
-    }
+      "path": ".",
+    },
   ],
   "settings": {
     "files.watcherExclude": {
@@ -14,7 +14,7 @@
       "**/*.log": true,
       "**/*.db": true,
       "**/venv/**": true,
-      "**/__pycache__/**": true
-    }
-  }
+      "**/__pycache__/**": true,
+    },
+  },
 }

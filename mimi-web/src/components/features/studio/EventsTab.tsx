@@ -1,55 +1,60 @@
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Filter, Clock } from 'lucide-react';
-import { Card } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
-import { Select } from '@/components/ui/Select';
-import { Skeleton } from '@/components/ui/Skeleton';
-import { formatDate } from '@/utils/text';
-import { apiService } from '@/services/api';
-import type { IngestionEvent } from '@/types/api';
-import { clsx } from 'clsx';
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Filter, Clock } from "lucide-react";
+import { Card } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { Select } from "@/components/ui/Select";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { formatDate } from "@/utils/text";
+import { apiService } from "@/services/api";
+import type { IngestionEvent } from "@/types/api";
+import { clsx } from "clsx";
 
 export const EventsTab: React.FC = () => {
-  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [statusFilter, setStatusFilter] = useState<string>("");
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['admin-updates'],
+    queryKey: ["admin-updates"],
     queryFn: () => apiService.getUpdates({ limit: 100 }),
   });
 
   const allEvents = data?.events || [];
-  const filteredEvents = statusFilter 
-    ? allEvents.filter(event => event.status === statusFilter)
+  const filteredEvents = statusFilter
+    ? allEvents.filter((event) => event.status === statusFilter)
     : allEvents;
 
   const statusCounts = {
-    success: allEvents.filter(e => e.status === 'success').length,
-    error: allEvents.filter(e => e.status === 'error').length,
-    pending: allEvents.filter(e => e.status === 'pending').length,
+    success: allEvents.filter((e) => e.status === "success").length,
+    error: allEvents.filter((e) => e.status === "error").length,
+    pending: allEvents.filter((e) => e.status === "pending").length,
   };
 
-  const getStatusBadge = (status: IngestionEvent['status']) => {
+  const getStatusBadge = (status: IngestionEvent["status"]) => {
     const variants = {
-      success: 'success' as const,
-      error: 'danger' as const,
-      pending: 'warning' as const,
+      success: "success" as const,
+      error: "danger" as const,
+      pending: "warning" as const,
     };
-    return <Badge variant={variants[status]} size="sm">{status}</Badge>;
+    return (
+      <Badge variant={variants[status]} size="sm">
+        {status}
+      </Badge>
+    );
   };
 
   const statusFilterOptions = [
-    { value: '', label: 'All statuses' },
-    { value: 'success', label: `Success (${statusCounts.success})` },
-    { value: 'error', label: `Error (${statusCounts.error})` },
-    { value: 'pending', label: `Pending (${statusCounts.pending})` },
+    { value: "", label: "All statuses" },
+    { value: "success", label: `Success (${statusCounts.success})` },
+    { value: "error", label: `Error (${statusCounts.error})` },
+    { value: "pending", label: `Pending (${statusCounts.pending})` },
   ];
 
   if (error) {
     return (
       <Card className="text-center py-12">
         <p className="text-red-600 dark:text-red-400">
-          Failed to load events: {error instanceof Error ? error.message : 'Unknown error'}
+          Failed to load events:{" "}
+          {error instanceof Error ? error.message : "Unknown error"}
         </p>
       </Card>
     );
@@ -67,16 +72,14 @@ export const EventsTab: React.FC = () => {
             Successful
           </div>
         </Card>
-        
+
         <Card className="text-center">
           <div className="text-2xl font-bold text-red-600 dark:text-red-400">
             {statusCounts.error}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Errors
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Errors</div>
         </Card>
-        
+
         <Card className="text-center">
           <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
             {statusCounts.pending}
@@ -99,7 +102,7 @@ export const EventsTab: React.FC = () => {
               className="w-48 bg-white dark:bg-gray-800"
             />
           </div>
-          
+
           <div className="text-sm text-gray-500 dark:text-gray-400">
             Showing {filteredEvents.length} of {allEvents.length} events
           </div>
@@ -126,7 +129,9 @@ export const EventsTab: React.FC = () => {
             <div className="p-12 text-center">
               <Clock className="w-8 h-8 mx-auto mb-2 text-gray-400" />
               <p className="text-gray-500 dark:text-gray-400">
-                {statusFilter ? `No ${statusFilter} events found` : 'No events found'}
+                {statusFilter
+                  ? `No ${statusFilter} events found`
+                  : "No events found"}
               </p>
             </div>
           ) : (
@@ -147,31 +152,62 @@ export const EventsTab: React.FC = () => {
                           <div className="relative">
                             <div
                               className={clsx([
-                                'h-10 w-10 rounded-full flex items-center justify-center ring-8 ring-white dark:ring-gray-800',
-                                event.status === 'success' && 'bg-green-500',
-                                event.status === 'error' && 'bg-red-500',
-                                event.status === 'pending' && 'bg-yellow-500',
+                                "h-10 w-10 rounded-full flex items-center justify-center ring-8 ring-white dark:ring-gray-800",
+                                event.status === "success" && "bg-green-500",
+                                event.status === "error" && "bg-red-500",
+                                event.status === "pending" && "bg-yellow-500",
                               ])}
                             >
-                              {event.status === 'success' && (
-                                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              {event.status === "success" && (
+                                <svg
+                                  className="w-5 h-5 text-white"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
                                 </svg>
                               )}
-                              {event.status === 'error' && (
-                                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                              {event.status === "error" && (
+                                <svg
+                                  className="w-5 h-5 text-white"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clipRule="evenodd"
+                                  />
                                 </svg>
                               )}
-                              {event.status === 'pending' && (
-                                <svg className="w-5 h-5 text-white animate-spin" fill="none" viewBox="0 0 24 24">
-                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                              {event.status === "pending" && (
+                                <svg
+                                  className="w-5 h-5 text-white animate-spin"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  />
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  />
                                 </svg>
                               )}
                             </div>
                           </div>
-                          
+
                           {/* Event content */}
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center justify-between">

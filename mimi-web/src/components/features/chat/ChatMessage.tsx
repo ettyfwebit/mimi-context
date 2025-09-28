@@ -1,12 +1,12 @@
-import React from 'react';
-import { User, Bot, ExternalLink } from 'lucide-react';
-import { Card } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
-import { isUrl } from '@/utils/text';
-import { clsx } from 'clsx';
+import React from "react";
+import { User, Bot, ExternalLink } from "lucide-react";
+import { Card } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { isUrl } from "@/utils/text";
+import { clsx } from "clsx";
 
 interface ChatMessageProps {
-  type: 'user' | 'assistant';
+  type: "user" | "assistant";
   content: string;
   sources?: Array<{ doc_id: string; path: string }>;
   timestamp: Date;
@@ -18,12 +18,12 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   sources,
   timestamp,
 }) => {
-  const isUser = type === 'user';
+  const isUser = type === "user";
 
   // Parse citation markers [n] and replace with clickable links
   const parsedContent = React.useMemo(() => {
     if (!sources || sources.length === 0) return content;
-    
+
     return content.replace(/\[(\d+)\]/g, (match, num) => {
       const index = parseInt(num, 10) - 1;
       if (index >= 0 && index < sources.length) {
@@ -37,30 +37,27 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
     if (sources && sources[index]) {
       const source = sources[index];
       // You could implement a modal or side panel to show source details
-      console.log('Citation clicked:', source);
+      console.log("Citation clicked:", source);
     }
   };
 
   return (
     <div
-      className={clsx([
-        'flex gap-4',
-        isUser ? 'justify-end' : 'justify-start',
-      ])}
+      className={clsx(["flex gap-4", isUser ? "justify-end" : "justify-start"])}
     >
       {!isUser && (
         <div className="flex-shrink-0 w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
           <Bot className="w-4 h-4 text-primary-600 dark:text-primary-400" />
         </div>
       )}
-      
-      <div className={clsx(['max-w-3xl', isUser && 'order-first'])}>
+
+      <div className={clsx(["max-w-3xl", isUser && "order-first"])}>
         <Card
           className={clsx([
-            'text-sm',
+            "text-sm",
             isUser
-              ? 'bg-primary-600 text-white border-primary-600'
-              : 'bg-white dark:bg-gray-800',
+              ? "bg-primary-600 text-white border-primary-600"
+              : "bg-white dark:bg-gray-800",
           ])}
         >
           <div
@@ -68,19 +65,21 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
             dangerouslySetInnerHTML={{ __html: parsedContent }}
             onClick={(e) => {
               const target = e.target as HTMLElement;
-              if (target.classList.contains('citation-marker')) {
-                const index = parseInt(target.dataset.index || '0', 10);
+              if (target.classList.contains("citation-marker")) {
+                const index = parseInt(target.dataset.index || "0", 10);
                 handleCitationClick(index);
               }
             }}
           />
-          
+
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 text-xs">
-            <span className={clsx([
-              isUser
-                ? 'text-primary-200'
-                : 'text-gray-500 dark:text-gray-400'
-            ])}>
+            <span
+              className={clsx([
+                isUser
+                  ? "text-primary-200"
+                  : "text-gray-500 dark:text-gray-400",
+              ])}
+            >
               {timestamp.toLocaleTimeString()}
             </span>
           </div>

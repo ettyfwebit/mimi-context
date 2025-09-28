@@ -55,13 +55,13 @@ Brief description of the changes introduced by this PR.
 
 If this PR contains breaking changes, please describe them here and update the version accordingly:
 
-- 
+-
 
 ## Dependencies
 
 List any dependencies that are required for this change:
 
-- 
+-
 
 ## Screenshots (if applicable)
 

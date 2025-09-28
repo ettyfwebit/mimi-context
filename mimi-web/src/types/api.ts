@@ -51,7 +51,7 @@ export interface IngestionEvent {
   time: string;
   type: string;
   ref: string;
-  status: 'success' | 'error' | 'pending';
+  status: "success" | "error" | "pending";
 }
 
 export interface AdminUpdatesResponse {
@@ -59,7 +59,7 @@ export interface AdminUpdatesResponse {
 }
 
 export interface HealthResponse {
-  status: 'healthy' | 'unhealthy';
+  status: "healthy" | "unhealthy";
   timestamp: string;
 }
 

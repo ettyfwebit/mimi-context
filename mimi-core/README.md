@@ -2,12 +2,15 @@
 
 ## Overview
 
-Mimi Core is a single-service MNVP (Minimum Non-Viable Product) implementation of an intelligent document processing and retrieval system. It provides document ingestion, normalization, chunking, embedding, indexing, and RAG (Retrieval Augmented Generation) query capabilities with citations.
+Mimi Core is a single-service MNVP (Minimum Non-Viable Product) implementation
+of an intelligent document processing and retrieval system. It provides document
+ingestion, normalization, chunking, embedding, indexing, and RAG (Retrieval
+Augmented Generation) query capabilities with citations.
 
 ## Features
 
 - **Document Ingestion**: Upload and process text/Markdown documents
-- **Smart Processing**: Text normalization, intelligent chunking, and deduplication  
+- **Smart Processing**: Text normalization, intelligent chunking, and deduplication
 - **Semantic Search**: Vector-based similarity search with embeddings
 - **RAG Queries**: Retrieve relevant chunks with citations
 - **Conversational Agent**: Natural language Q&A with OpenAI or Ollama LLMs
@@ -25,6 +28,7 @@ Mimi Core is a single-service MNVP (Minimum Non-Viable Product) implementation o
 ### Installation
 
 1. **Clone and setup environment:**
+
 ```bash
 git clone <repository-url>
 cd mimi-core
@@ -33,34 +37,40 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-2. **Configure environment:**
+1. **Configure environment:**
+
 ```bash
 cp .env.example .env
 # Edit .env with your OpenAI API key and other settings
 ```
 
-3. **Start Qdrant (recommended vector backend):**
+1. **Start Qdrant (recommended vector backend):**
+
 ```bash
 docker run -p 6333:6333 qdrant/qdrant
 ```
 
-4. **Initialize database:**
+1. **Initialize database:**
+
 ```bash
 python scripts/init_db.py
 ```
 
-5. **Start the application:**
+1. **Start the application:**
+
 ```bash
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
 ```
 
-6. **Access the API:**
-- Interactive docs: http://localhost:8080/docs
-- Health check: http://localhost:8080/health
+1. **Access the API:**
+
+- Interactive docs: <http://localhost:8080/docs>
+- Health check: <http://localhost:8080/health>
 
 ### Basic Usage
 
 **Upload a document:**
+
 ```bash
 curl -X POST "http://localhost:8080/ingest/upload" \
   -F "file=@document.txt" \
@@ -69,21 +79,23 @@ curl -X POST "http://localhost:8080/ingest/upload" \
 ```
 
 **Query documents:**
+
 ```bash
 curl -X POST "http://localhost:8080/rag/query" \
   -H "Content-Type: application/json" \
-  -d '{"question": "How do I book a ticket?", "top_k": 5}'
+  -d '{"query": "What is the document about?", "limit": 5}'
 ```
 
 ## Architecture
 
 ### Project Structure
-```
+
+```text
 mimi-core/
 ├── app/
 │   ├── api/              # HTTP endpoints (no business logic)
 │   │   ├── health/       # Health check endpoint
-│   │   ├── ingest/       # Document upload endpoints  
+│   │   ├── ingest/       # Document upload endpoints
 │   │   ├── rag/          # Query endpoints
 │   │   └── admin/        # Admin/monitoring endpoints
 │   ├── services/         # Core business logic
@@ -113,13 +125,13 @@ mimi-core/
 
 Key environment variables:
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `VECTOR_BACKEND` | `qdrant` | Vector storage backend (`qdrant` or `openai`) |
-| `OPENAI_API_KEY` | - | Required for embeddings |
-| `QDRANT_URL` | `http://localhost:6333` | Qdrant instance URL |
-| `UPLOAD_MAX_SIZE_MB` | `10` | Maximum upload file size |
-| `DATABASE_URL` | `sqlite:///./mimi_metadata.db` | Metadata database |
+| Variable             | Default                        | Description                                   |
+| -------------------- | ------------------------------ | --------------------------------------------- |
+| `VECTOR_BACKEND`     | `qdrant`                       | Vector storage backend (`qdrant` or `openai`) |
+| `OPENAI_API_KEY`     | -                              | Required for embeddings                       |
+| `QDRANT_URL`         | `http://localhost:6333`        | Qdrant instance URL                           |
+| `UPLOAD_MAX_SIZE_MB` | `10`                           | Maximum upload file size                      |
+| `DATABASE_URL`       | `sqlite:///./mimi_metadata.db` | Metadata database                             |
 
 See `.env.example` for full configuration options.
 
@@ -131,12 +143,16 @@ See `.env.example` for full configuration options.
 - `POST /ingest/upload` - Upload document for processing
 - `POST /rag/query` - Query documents with semantic search
 
-### Admin Endpoints  
+### Admin Endpoints
 
 - `GET /admin/updates` - List recent ingestion events
 - `GET /admin/docs` - List processed documents
 
 Full API documentation available at `/docs` when running.
+
+## Testing
+
+```bash
 
 ## Testing
 
@@ -164,19 +180,22 @@ pytest app/tests/test_integration.py     # Integration tests
 ### Processing Pipeline
 
 The document processing flow:
+
 1. Upload → Validation → Normalization
-2. Chunking → Metadata extraction  
+2. Chunking → Metadata extraction
 3. Vector embedding → Storage
 4. Event logging → Response
 
 ### Vector Backends
 
 **Qdrant (Recommended):**
+
 - Self-hosted vector database
 - Full-featured with filtering and metadata
 - Good for development and production
 
 **OpenAI Vector Store:**
+
 - Managed service option
 - Simplified deployment
 - Limited MNVP implementation
@@ -184,6 +203,7 @@ The document processing flow:
 ## Production Deployment
 
 ### Docker
+
 ```bash
 # Build image
 docker build -t mimi-core .
@@ -193,6 +213,7 @@ docker run -p 8080:8080 --env-file .env mimi-core
 ```
 
 ### Environment
+
 - Set `APP_ENV=production`
 - Configure vector backend with production credentials
 - Set up proper logging and monitoring
@@ -200,11 +221,13 @@ docker run -p 8080:8080 --env-file .env mimi-core
 
 ## Conversational Agent Configuration
 
-Mimi Core now includes a conversational agent that provides natural language answers based on your document collection.
+Mimi Core now includes a conversational agent that provides natural language
+answers based on your document collection.
 
 ### Agent Backends
 
 #### OpenAI Backend (Recommended)
+
 ```bash
 # Add to your .env file
 AGENT_BACKEND=openai
@@ -213,14 +236,17 @@ AGENT_OPENAI_MODEL=gpt-4o-mini  # or gpt-4, gpt-3.5-turbo
 ```
 
 #### Ollama Backend (Local LLM)
+
 1. **Install and start Ollama:**
+
 ```bash
 # Install Ollama from https://ollama.ai
 ollama pull mistral  # or llama3, phi3, etc.
 ollama serve
 ```
 
-2. **Configure environment:**
+1. **Configure environment:**
+
 ```bash
 # Add to your .env file
 AGENT_BACKEND=ollama
@@ -247,6 +273,7 @@ curl -X POST "http://localhost:8080/agent/ask" \
 ```
 
 Example response:
+
 ```json
 {
   "answer": "To book a ticket, you need to follow these steps...",
@@ -258,6 +285,7 @@ Example response:
 ```
 
 ### Conversation Memory (Optional)
+
 ```bash
 # Add to your .env file
 AGENT_ENABLE_MEMORY=true
@@ -277,7 +305,7 @@ curl -X POST "http://localhost:8080/agent/ask" \
 The modular architecture enables easy service extraction:
 
 - **Document Service**: `app/services/pipeline_core/`
-- **Vector Service**: `app/services/vector_adapter/`  
+- **Vector Service**: `app/services/vector_adapter/`
 - **Metadata Service**: `app/services/metadata/`
 - **Query Service**: `app/api/rag/`
 - **Agent Service**: `app/services/agent_core/`
@@ -289,15 +317,18 @@ Each service has minimal dependencies and clear interfaces.
 ### Common Issues
 
 **Vector store connection failed:**
+
 - Ensure Qdrant is running and accessible
 - Check `QDRANT_URL` configuration
 - Verify network connectivity
 
 **OpenAI API errors:**
+
 - Validate API key and credits
 - Check rate limits and model availability
 
 **Upload failures:**
+
 - Verify file format and size limits
 - Ensure UTF-8 encoding for text files
 
@@ -317,6 +348,7 @@ See `docs/runbook/` for detailed troubleshooting guides.
 ## Support
 
 For support and questions:
+
 - Check the documentation in `docs/`
 - Review API docs at `/docs`
 - See troubleshooting in `docs/runbook/`

@@ -19,7 +19,7 @@ paths:
       tags: [health]
       summary: Health check
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -52,7 +52,7 @@ paths:
                   type: string
                   nullable: true
       responses:
-        '200':
+        "200":
           description: Ingestion accepted
           content:
             application/json:
@@ -86,7 +86,7 @@ paths:
                   additionalProperties: true
                   example: { "source": ["upload"] }
       responses:
-        '200':
+        "200":
           description: Ranked snippets with citations
           content:
             application/json:
@@ -107,12 +107,15 @@ paths:
                           items:
                             type: object
                             properties:
-                              chunk_id: { type: string, example: "upload:foo.md::c0" }
-                              doc_id:   { type: string, example: "upload:foo.md" }
-                              source:   { type: string, example: "upload" }
-                              path:     { type: string, example: "kb/foo.md" }
-                              score:    { type: number, format: float, example: 0.86 }
-                              snippet:  { type: string, example: "To book a ticket..." }
+                              chunk_id:
+                                { type: string, example: "upload:foo.md::c0" }
+                              doc_id: { type: string, example: "upload:foo.md" }
+                              source: { type: string, example: "upload" }
+                              path: { type: string, example: "kb/foo.md" }
+                              score:
+                                { type: number, format: float, example: 0.86 }
+                              snippet:
+                                { type: string, example: "To book a ticket..." }
 
   /admin/updates:
     get:
@@ -123,7 +126,7 @@ paths:
           name: limit
           schema: { type: integer, default: 50 }
       responses:
-        '200':
+        "200":
           description: Recent events
           content:
             application/json:
@@ -135,11 +138,17 @@ paths:
                     items:
                       type: object
                       properties:
-                        id:         { type: integer, example: 12 }
-                        type:       { type: string, example: "ingest" }
-                        ref:        { type: string, nullable: true, example: "upload:foo.md" }
-                        status:     { type: string, example: "success" }
-                        created_at: { type: string, example: "2025-09-25T10:03:00Z" }
+                        id: { type: integer, example: 12 }
+                        type: { type: string, example: "ingest" }
+                        ref:
+                          {
+                            type: string,
+                            nullable: true,
+                            example: "upload:foo.md",
+                          }
+                        status: { type: string, example: "success" }
+                        created_at:
+                          { type: string, example: "2025-09-25T10:03:00Z" }
 
   /admin/docs:
     get:
@@ -153,7 +162,7 @@ paths:
           name: limit
           schema: { type: integer, default: 100 }
       responses:
-        '200':
+        "200":
           description: Recent documents
           content:
             application/json:
@@ -165,9 +174,11 @@ paths:
                     items:
                       type: object
                       properties:
-                        doc_id:     { type: string, example: "upload:foo.md" }
-                        source:     { type: string, example: "upload" }
-                        path:       { type: string, nullable: true, example: "kb/foo.md" }
-                        hash:       { type: string, example: "a1b2c3..." }
-                        lang:       { type: string, nullable: true, example: "en" }
-                        updated_at: { type: string, example: "2025-09-25T10:00:00Z" }
+                        doc_id: { type: string, example: "upload:foo.md" }
+                        source: { type: string, example: "upload" }
+                        path:
+                          { type: string, nullable: true, example: "kb/foo.md" }
+                        hash: { type: string, example: "a1b2c3..." }
+                        lang: { type: string, nullable: true, example: "en" }
+                        updated_at:
+                          { type: string, example: "2025-09-25T10:00:00Z" }

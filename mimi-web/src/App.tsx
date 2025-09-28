@@ -1,9 +1,8 @@
-
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Layout } from '@/components/layout/Layout';
-import { SearchPage } from '@/pages/Search';
-import { ChatPage } from '@/pages/Chat';
-import { StudioPage } from '@/pages/Studio';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Layout } from "@/components/layout/Layout";
+import { SearchPage } from "@/pages/Search";
+import { ChatPage } from "@/pages/Chat";
+import { StudioPage } from "@/pages/Studio";
 
 function App() {
   return (

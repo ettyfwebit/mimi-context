@@ -3,7 +3,8 @@
 ## Local Development Setup
 
 ### Prerequisites
-- Python 3.9+ 
+
+- Python 3.9+
 - Docker (for Qdrant)
 - OpenAI API key (for embeddings)
 
@@ -17,7 +18,7 @@ cd mimi-core
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install dependencies  
+# Install dependencies
 pip install -r requirements.txt
 ```
 
@@ -67,12 +68,14 @@ Visit http://localhost:8080/docs to access the interactive API documentation.
 ## Smoke Tests
 
 ### 1. Health Check
+
 ```bash
 curl http://localhost:8080/health
 # Expected: {"status": "ok"}
 ```
 
 ### 2. Document Upload
+
 ```bash
 # Create test document
 echo "This is a test document about booking tickets. The process involves selecting dates and destinations." > test_doc.txt
@@ -87,6 +90,7 @@ curl -X POST "http://localhost:8080/ingest/upload" \
 ```
 
 ### 3. RAG Query
+
 ```bash
 curl -X POST "http://localhost:8080/rag/query" \
   -H "Content-Type: application/json" \
@@ -99,17 +103,19 @@ curl -X POST "http://localhost:8080/rag/query" \
 ```
 
 ### 4. Admin Endpoints
+
 ```bash
 # List recent events
 curl "http://localhost:8080/admin/updates?limit=10"
 
-# List documents  
+# List documents
 curl "http://localhost:8080/admin/docs?limit=10"
 ```
 
 ## Running Tests
 
 ### Unit Tests
+
 ```bash
 # Run all tests
 pytest
@@ -121,7 +127,8 @@ pytest app/tests/test_chunking.py
 pytest --cov=app
 ```
 
-### Integration Tests  
+### Integration Tests
+
 ```bash
 # Run integration tests (requires running services)
 pytest app/tests/test_integration.py
@@ -133,6 +140,7 @@ pytest -m "not external"
 ## Production Deployment
 
 ### Environment Variables
+
 Ensure these are set in production:
 
 - `APP_ENV=production`
@@ -142,6 +150,7 @@ Ensure these are set in production:
 - `QDRANT_API_KEY=your_qdrant_key` (if required)
 
 ### Docker Deployment
+
 ```bash
 # Build image
 docker build -t mimi-core .
@@ -151,6 +160,7 @@ docker run -p 8080:8080 --env-file .env mimi-core
 ```
 
 ### Health Monitoring
+
 - Health endpoint: `GET /health`
 - Metrics: Check logs for ingestion events and performance data
 - Error tracking: Monitor application logs for error patterns
@@ -160,26 +170,31 @@ docker run -p 8080:8080 --env-file .env mimi-core
 ### Common Issues
 
 **Vector store connection failed**
+
 - Check Qdrant is running and accessible
 - Verify QDRANT_URL and credentials
 - Check network connectivity
 
 **OpenAI API errors**
+
 - Verify API key is valid and has credits
 - Check rate limits and usage quotas
 - Ensure embedding model is available
 
-**Database initialization errors**  
+**Database initialization errors**
+
 - Check file permissions for SQLite database
 - Ensure database directory exists
 - Verify disk space availability
 
 **Large file upload failures**
+
 - Check UPLOAD_MAX_SIZE_MB setting
 - Verify file encoding (must be UTF-8)
 - Ensure allowed file extensions
 
 ### Log Analysis
+
 ```bash
 # View application logs
 tail -f app.log

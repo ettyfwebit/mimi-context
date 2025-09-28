@@ -1,12 +1,13 @@
 ---
 name: Security Vulnerability
 about: Report a security vulnerability (use this template for non-critical security issues only)
-title: '[SECURITY] '
-labels: ['security', 'high-priority']
-assignees: ''
+title: "[SECURITY] "
+labels: ["security", "high-priority"]
+assignees: ""
 ---
 
 ⚠️ **IMPORTANT**: For critical security vulnerabilities, please do NOT use this public issue template. Instead, please report privately via:
+
 - Email: security@your-domain.com
 - GitHub Security Advisories (preferred)
 - Direct contact with maintainers
@@ -41,19 +42,21 @@ assignees: ''
 ## Description
 
 Provide a clear description of the security issue. Include:
+
 - What is vulnerable?
 - How could it be exploited?
 - What data or functionality is at risk?
 
 ## Steps to Reproduce
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Impact
 
 Describe the potential impact if this vulnerability were exploited:
+
 - What data could be accessed?
 - What actions could an attacker perform?
 - Who would be affected?

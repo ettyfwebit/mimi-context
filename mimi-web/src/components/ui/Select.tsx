@@ -1,5 +1,5 @@
-import React from 'react';
-import { clsx } from 'clsx';
+import React from "react";
+import { clsx } from "clsx";
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
@@ -30,13 +30,13 @@ export const Select: React.FC<SelectProps> = ({
       <select
         id={selectId}
         className={clsx([
-          'block w-full px-3 py-2 border rounded-md shadow-sm',
-          'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
-          'disabled:opacity-50 disabled:cursor-not-allowed',
+          "block w-full px-3 py-2 border rounded-md shadow-sm",
+          "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
+          "disabled:opacity-50 disabled:cursor-not-allowed",
           error
-            ? 'border-red-300 dark:border-red-600 bg-red-50 dark:bg-red-900/20'
-            : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800',
-          'text-gray-900 dark:text-gray-100',
+            ? "border-red-300 dark:border-red-600 bg-red-50 dark:bg-red-900/20"
+            : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800",
+          "text-gray-900 dark:text-gray-100",
           className,
         ])}
         {...props}

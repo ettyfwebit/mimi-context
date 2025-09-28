@@ -85,4 +85,4 @@ We thank the following researchers and security professionals who have helped im
 
 ---
 
-*Last updated: September 2025*
+_Last updated: September 2025_
