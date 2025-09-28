@@ -1,4 +1,5 @@
-# Mimi Context - Intelligence Document Processing System
+# Mimi - My Info, My Intelligence
+# Intelligence Document Processing System
 
 A full-stack application for intelligent document processing, retrieval, and conversational AI.
 
@@ -74,3 +75,7 @@ Built as a modular system ready for microservice decomposition:
 ## License
 
 [Add your license here]
+<img width="1944" height="1062" alt="image" src="https://github.com/user-attachments/assets/b1b7d245-2767-4d36-b748-ac1b26df26a5" />
+<img width="2496" height="1522" alt="image" src="https://github.com/user-attachments/assets/267f8cc0-0a1a-4382-a37c-3032b9b2368d" />
+<img width="1772" height="1484" alt="image" src="https://github.com/user-attachments/assets/4e335c91-768c-496c-8e72-9b24a0477df3" />
+
