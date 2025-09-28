@@ -1,0 +1,8 @@
+{
+  "httpStatusCodes": [200, 301, 302],
+  "timeout": "10s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackHttpStatus": 200,
+  "aliveStatusCodes": [200, 206]
+}

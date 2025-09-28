@@ -1,0 +1,49 @@
+# GitLeaks configuration for secrets scanning
+# Customized rules for detecting exposed secrets and credentials
+
+title = "GitLeaks Configuration for Mimi-Context"
+
+[extend]
+useDefault = true
+
+[[rules]]
+description = "Environment Variables"
+id = "env-vars"
+regex = '''(?i)(api_key|secret_key|password|token|auth)=([A-Za-z0-9+/]{20,})'''
+tags = ["env", "credentials"]
+
+[[rules]]
+description = "Database Connection Strings"
+id = "db-connection"
+regex = '''(?i)(mongodb|mysql|postgresql|sqlite)://[^\\s]+'''
+tags = ["database", "connection"]
+
+[[rules]]
+description = "JWT Tokens"
+id = "jwt-token"
+regex = '''eyJ[A-Za-z0-9+/]+=*\.eyJ[A-Za-z0-9+/]+=*\.[A-Za-z0-9+/]+=*'''
+tags = ["jwt", "token"]
+
+[[rules]]
+description = "OpenAI API Keys"
+id = "openai-key"
+regex = '''sk-[A-Za-z0-9]{48}'''
+tags = ["openai", "api-key"]
+
+[allowlist]
+description = "Allowlist for false positives"
+files = [
+    '''.*\.md$''',
+    '''.*\.example$''',
+    '''.*\.template$'''
+]
+
+commits = [
+    # Add specific commit SHAs to allowlist if needed
+]
+
+paths = [
+    '''requirements\.txt''',
+    '''package\.json''',
+    '''.*test.*'''
+]

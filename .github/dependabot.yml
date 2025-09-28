@@ -1,0 +1,80 @@
+# Dependabot configuration for automated dependency updates
+# Monitors and creates PRs for security updates and version upgrades
+
+version: 2
+updates:
+  # Python dependencies (backend)
+  - package-ecosystem: "pip"
+    directory: "/mimi-core"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    reviewers:
+      - "ettyfwebit"  # Replace with actual usernames
+    assignees:
+      - "ettyfwebit"
+    commit-message:
+      prefix: "deps(python)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "python"
+      - "backend"
+    open-pull-requests-limit: 5
+    # Only security updates for production dependencies
+    target-branch: "main"
+
+  # Node.js dependencies (frontend)
+  - package-ecosystem: "npm"
+    directory: "/mimi-web"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "09:00"
+    reviewers:
+      - "ettyfwebit"
+    assignees:
+      - "ettyfwebit"
+    commit-message:
+      prefix: "deps(node)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "javascript"
+      - "frontend"
+    open-pull-requests-limit: 5
+    # Ignore dev dependencies for major versions (can be noisy)
+    ignore:
+      - dependency-name: "@types/*"
+        update-types: ["version-update:semver-major"]
+
+  # Docker dependencies
+  - package-ecosystem: "docker"
+    directory: "/mimi-core"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "09:00"
+    reviewers:
+      - "ettyfwebit"
+    commit-message:
+      prefix: "deps(docker)"
+    labels:
+      - "dependencies"
+      - "docker"
+
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "thursday"
+      time: "09:00"
+    reviewers:
+      - "ettyfwebit"
+    commit-message:
+      prefix: "deps(actions)"
+    labels:
+      - "dependencies"
+      - "github-actions"

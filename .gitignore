@@ -1,36 +1,133 @@
 # Root-level gitignore for mimi-context
 
-# Environment files
-.env
+# Environment files (SECURITY CRITICAL - Never commit these!)
+.env*
+!.env.example
+.envrc
 .env.local
 .env.production
 .env.staging
+.env.development
+.env.test
+
+# Secrets and credentials (SECURITY CRITICAL)
+secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+config/secrets.yml
+config/database.yml
+auth.json
+service-account*.json
+credentials.json
+token.json
+.secrets
 
 # Database files
 *.db
 *.sqlite
 *.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
 
-# Logs
+# Logs and monitoring
 *.log
 logs/
 backend.log
+*.log.*
+access.log
+error.log
+debug.log
 
 # OS files
 .DS_Store
 .DS_Store?
 ._*
 Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# IDE
+# IDE and editor files
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.classpath
+*.sublime-*
+.atom/
 
-# Node modules (if any packages are added at root)
+# Node modules and npm
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.node_repl_history
+.yarn-integrity
+.pnp.*
 
-# Python cache (if any Python files are added at root)
+# Python cache and virtual environments
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.venv
+venv/
+env/
+ENV/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Docker
+.dockerignore
+
+# Backup and temporary files
+*.bak
+*.backup
+*.tmp
+*.temp
+*~
+.#*
+\#*#
+
+# Security scan results
+*.sarif
+security-reports/
+bandit-report.*
+safety-report.*
+trivy-report.*
+
+# CI/CD artifacts
+coverage/
+test-results/
+allure-results/
