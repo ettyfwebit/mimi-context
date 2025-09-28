@@ -2,10 +2,7 @@
 
 ## Overview
 
-Mimi Core is a single-service MNVP (Minimum Non-Viable Product) implementation
-of an intelligent document processing and retrieval system. It provides document
-ingestion, normalization, chunking, embedding, indexing, and RAG (Retrieval
-Augmented Generation) query capabilities with citations.
+Mimi Core is a single-service MNVP (Minimum Non-Viable Product) implementation of an intelligent document processing and retrieval system. It provides document ingestion, normalization, chunking, embedding, indexing, and RAG (Retrieval Augmented Generation) query capabilities with citations.
 
 ## Features
 
@@ -37,35 +34,35 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-1. **Configure environment:**
+2. **Configure environment:**
 
 ```bash
 cp .env.example .env
 # Edit .env with your OpenAI API key and other settings
 ```
 
-1. **Start Qdrant (recommended vector backend):**
+3. **Start Qdrant (recommended vector backend):**
 
 ```bash
 docker run -p 6333:6333 qdrant/qdrant
 ```
 
-1. **Initialize database:**
+4. **Initialize database:**
 
 ```bash
 python scripts/init_db.py
 ```
 
-1. **Start the application:**
+5. **Start the application:**
 
 ```bash
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
 ```
 
-1. **Access the API:**
+6. **Access the API:**
 
-- Interactive docs: <http://localhost:8080/docs>
-- Health check: <http://localhost:8080/health>
+- Interactive docs: http://localhost:8080/docs
+- Health check: http://localhost:8080/health
 
 ### Basic Usage
 
@@ -83,14 +80,14 @@ curl -X POST "http://localhost:8080/ingest/upload" \
 ```bash
 curl -X POST "http://localhost:8080/rag/query" \
   -H "Content-Type: application/json" \
-  -d '{"query": "What is the document about?", "limit": 5}'
+  -d '{"question": "How do I book a ticket?", "top_k": 5}'
 ```
 
 ## Architecture
 
 ### Project Structure
 
-```text
+```
 mimi-core/
 ├── app/
 │   ├── api/              # HTTP endpoints (no business logic)
@@ -149,10 +146,6 @@ See `.env.example` for full configuration options.
 - `GET /admin/docs` - List processed documents
 
 Full API documentation available at `/docs` when running.
-
-## Testing
-
-```bash
 
 ## Testing
 
@@ -221,8 +214,7 @@ docker run -p 8080:8080 --env-file .env mimi-core
 
 ## Conversational Agent Configuration
 
-Mimi Core now includes a conversational agent that provides natural language
-answers based on your document collection.
+Mimi Core now includes a conversational agent that provides natural language answers based on your document collection.
 
 ### Agent Backends
 
@@ -245,7 +237,7 @@ ollama pull mistral  # or llama3, phi3, etc.
 ollama serve
 ```
 
-1. **Configure environment:**
+2. **Configure environment:**
 
 ```bash
 # Add to your .env file

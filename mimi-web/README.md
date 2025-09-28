@@ -1,8 +1,6 @@
 # Mimi Web
 
-A modern React frontend for the Mimi knowledge base system. Provides intelligent
-search, AI chat, and administrative tools for managing your documents and system
-health.
+A modern React frontend for the Mimi knowledge base system. Provides intelligent search, AI chat, and administrative tools for managing your documents and system health.
 
 ## Features
 
@@ -41,7 +39,7 @@ health.
 ### 1. Installation
 
 ```bash
-
+npm install
 ```
 
 ### 2. Environment Configuration
@@ -49,6 +47,8 @@ health.
 Copy the environment template:
 
 ```bash
+cp .env.example .env.local
+```
 
 Edit `.env.local` and set your backend URL:
 
@@ -112,7 +112,7 @@ This frontend expects the following endpoints from your Mimi Core backend:
 
 ## Project Structure
 
-```text
+```
 src/
 ├── components/          # Reusable UI components
 │   ├── ui/             # Basic UI primitives (Button, Input, etc.)
