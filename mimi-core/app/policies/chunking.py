@@ -77,34 +77,28 @@ class TextChunker:
         """
         # Look for natural break points in order of preference
         search_start = max(start + self.min_chunk_size, preferred_end - 200)
-        # Limit search to reasonable range but don't exceed max boundary
-        search_end = min(preferred_end + 50, len(text))  # Allow small overage for natural breaks
-        search_text = text[search_start:search_end]
+        search_text = text[search_start:preferred_end + 100]
         
         # Try paragraph breaks first
         paragraph_match = re.search(r'\n\s*\n', search_text)
         if paragraph_match:
-            break_point = search_start + paragraph_match.start()
-            return min(break_point, search_end)
+            return search_start + paragraph_match.start()
         
         # Try sentence endings
         sentence_matches = list(re.finditer(r'[.!?]\s+', search_text))
         if sentence_matches:
             # Use the last sentence break within range
-            break_point = search_start + sentence_matches[-1].end()
-            return min(break_point, search_end)
+            return search_start + sentence_matches[-1].end()
         
         # Try line breaks
         line_matches = list(re.finditer(r'\n', search_text))
         if line_matches:
-            break_point = search_start + line_matches[-1].start()
-            return min(break_point, search_end)
+            return search_start + line_matches[-1].start()
         
         # Fall back to word boundaries
         word_matches = list(re.finditer(r'\s+', search_text))
         if word_matches:
-            break_point = search_start + word_matches[-1].start()
-            return min(break_point, search_end)
+            return search_start + word_matches[-1].start()
         
         # Last resort: use preferred end
         return min(preferred_end, len(text))
