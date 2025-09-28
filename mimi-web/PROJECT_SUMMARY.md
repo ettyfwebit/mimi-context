@@ -73,7 +73,7 @@ A complete, modern React frontend for the Mimi knowledge base system that meets 
 
 #### Key Components Structure
 
-```text
+```
 src/
 ├── components/
 │   ├── ui/           # Reusable UI primitives
@@ -160,7 +160,7 @@ npm run build
 npm run preview
 ```
 
-### Testing & Quality
+### Testing
 
 ```bash
 npm test          # Run tests
@@ -212,8 +212,6 @@ npm run format    # Format code
 
 ## 🎉 Result
 
-**A fully functional, production-ready React frontend that exceeds the
-specification requirements with modern UX, accessibility features, and robust
-error handling.**
+**A fully functional, production-ready React frontend that exceeds the specification requirements with modern UX, accessibility features, and robust error handling.**
 
 The application is now running at `http://localhost:3000` and ready to connect to your Mimi Core backend!
