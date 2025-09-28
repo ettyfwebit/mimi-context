@@ -4,14 +4,16 @@ import { UploadTab } from "@/components/features/studio/UploadTab";
 import { DocsTab } from "@/components/features/studio/DocsTab";
 import { EventsTab } from "@/components/features/studio/EventsTab";
 import { HealthTab } from "@/components/features/studio/HealthTab";
+import { ConfluenceSync } from "@/components/features/ConfluenceSync";
 
-type TabId = "upload" | "docs" | "events" | "health";
+type TabId = "upload" | "docs" | "events" | "health" | "confluence";
 
 const tabs = [
   { id: "upload" as TabId, label: "Upload" },
   { id: "docs" as TabId, label: "Documents" },
   { id: "events" as TabId, label: "Events" },
   { id: "health" as TabId, label: "Health" },
+  { id: "confluence" as TabId, label: "Confluence Sync" },
 ];
 
 export const StudioPage: React.FC = () => {
@@ -27,6 +29,8 @@ export const StudioPage: React.FC = () => {
         return <EventsTab />;
       case "health":
         return <HealthTab />;
+      case "confluence":
+        return <ConfluenceSync />;
       default:
         return null;
     }

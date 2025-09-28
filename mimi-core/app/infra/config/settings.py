@@ -44,6 +44,25 @@ class Settings(BaseSettings):
     agent_ollama_model: str = "mistral"
     agent_enable_memory: bool = False
     
+    # Confluence configuration
+    confluence_base_url: Optional[str] = None
+    confluence_auth_token: Optional[str] = None
+    conf_space_key: Optional[str] = None
+    conf_root_page_id: Optional[str] = None
+    conf_include_labels: str = ""  # CSV
+    conf_exclude_labels: str = ""  # CSV
+    conf_path_prefix: Optional[str] = None
+    conf_max_pages: int = 2000
+    conf_max_depth: int = 5
+    conf_concurrency: int = 4
+    conf_dry_run_default: bool = False
+    
+    # RAG/ingest knobs
+    chunk_target_size: int = 1000
+    chunk_overlap: int = 140
+    require_path: bool = True
+    rag_min_score: float = 0.30
+    
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

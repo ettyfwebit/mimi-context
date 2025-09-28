@@ -97,3 +97,61 @@ export interface AppConfig {
   defaultModel?: string;
   confidenceThreshold: number;
 }
+
+// Confluence Types
+export interface ConfluenceFullSyncRequest {
+  space_key?: string;
+  root_page_id?: string;
+  path_prefix?: string;
+  include_labels: string[];
+  exclude_labels: string[];
+  max_pages: number;
+  max_depth: number;
+  dry_run: boolean;
+}
+
+export interface ConfluenceFullSyncResponse {
+  job_id: string;
+  status: string;
+}
+
+export interface ConfluenceProgress {
+  discovered_pages: number;
+  fetched_pages: number;
+  indexed_chunks: number;
+  skipped_unchanged: number;
+  failed_pages: number;
+}
+
+export interface ConfluenceJobStatus {
+  job_id: string;
+  status: string;
+  progress: ConfluenceProgress;
+  current?: {
+    page_id: string;
+    title: string;
+  };
+  logs_tail: string[];
+  error_message?: string;
+  started_at?: string;
+  completed_at?: string;
+}
+
+export interface ConfluenceCancelRequest {
+  job_id: string;
+}
+
+export interface ConfluenceReportResponse {
+  job_id: string;
+  report_type: string;
+  total_items: number;
+  items: Array<{
+    page_id: string;
+    title: string;
+    error?: string;
+    doc_id?: string;
+    chunks?: number;
+    reason?: string;
+    timestamp: string;
+  }>;
+}
