@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.watcherExclude": {
+      "**/node_modules/**": true,
+      "**/.git/**": true,
+      "**/dist/**": true,
+      "**/build/**": true,
+      "**/.env": true,
+      "**/*.log": true,
+      "**/*.db": true,
+      "**/venv/**": true,
+      "**/__pycache__/**": true
+    }
+  }
+}

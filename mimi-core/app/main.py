@@ -40,11 +40,17 @@ def create_app() -> FastAPI:
     )
     
     # Add CORS middleware
+    # TODO: Configure specific origins for production
+    allowed_origins = ["http://localhost:3000", "http://localhost:5173"]  # Common dev ports
+    if settings.app_env == "production":
+        # Add your production domain here
+        allowed_origins = ["https://yourdomain.com"]
+    
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # Configure appropriately for production
+        allow_origins=allowed_origins,
         allow_credentials=True,
-        allow_methods=["*"],
+        allow_methods=["GET", "POST", "PUT", "DELETE"],
         allow_headers=["*"],
     )
     
