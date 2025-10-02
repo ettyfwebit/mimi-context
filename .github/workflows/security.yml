@@ -190,7 +190,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: ZAP Baseline Scan
-        uses: zaproxy/action-baseline@v0.7.0
+        uses: zaproxy/action-baseline@v0.14.0
         with:
           target: "https://your-deployed-app-url.com" # Replace with your actual URL
           rules_file_name: ".zap/rules.tsv"
