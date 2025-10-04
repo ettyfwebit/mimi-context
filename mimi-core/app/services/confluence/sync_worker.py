@@ -69,7 +69,7 @@ class ConfluenceSyncWorker:
             metadata_service = MetadataService()
             await metadata_service.initialize()
             
-            vector_adapter = await create_vector_adapter()
+            vector_adapter = create_vector_adapter()
             
             # Stage 1: Discovery
             pages = await self._discover_pages(job_manager, job_id, request)
